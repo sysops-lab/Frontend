@@ -27,6 +27,36 @@ export default function Songs() {
     setSelectedSong(song);
   }
 
+  async function deleteSong(id) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this song? This action cannot be undone.",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const result = await songAPI.delete(id);
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+
+      // Remove song from library
+      setSongs((prevSongs) => prevSongs.filter((song) => song.id !== id));
+
+      // Clear selected song
+      if (selectedSong?.id === id) {
+        setSelectedSong(null);
+      }
+
+      alert("Song deleted successfully!");
+    } catch (error) {
+      console.error("Delete error:", error);
+
+      alert(error.message || "Unable to delete song.");
+    }
+  }
+
   async function showSlide(slide) {
     await displayAPI.showSlide({
       title: selectedSong.title,
@@ -77,16 +107,22 @@ export default function Songs() {
         <section className="content">
           {selectedSong && (
             <>
-              <h2>{selectedSong.title}</h2>
+              <div className="song-actions">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/songs/edit/${selectedSong.id}`)}
+                >
+                  ✏️ Edit Song
+                </button>
 
-              <p>{selectedSong.artist}</p>
-
-              <button
-                type="button"
-                onClick={() => navigate(`/songs/edit/${selectedSong.id}`)}
-              >
-                ✏️ Edit Song
-              </button>
+                <button
+                  type="button"
+                  className="delete-song-btn"
+                  onClick={() => deleteSong(selectedSong.id)}
+                >
+                  🗑️ Delete Song
+                </button>
+              </div>
 
               <div className="slides">
                 {selectedSong.slides.map((slide) => (

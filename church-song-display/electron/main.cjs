@@ -227,7 +227,27 @@ function registerIPC() {
   });
 
   ipcMain.handle("songs:delete", async (_, id) => {
-    return songService.deleteSong(Number(id));
+    try {
+      const songId = Number(id);
+
+      if (!Number.isInteger(songId) || songId <= 0) {
+        throw new Error("Invalid song ID");
+      }
+
+      await songService.deleteSong(songId);
+
+      return {
+        success: true,
+        message: "Song deleted successfully",
+      };
+    } catch (error) {
+      console.error("Failed to delete song:", error);
+
+      return {
+        success: false,
+        message: error.message || "Failed to delete song",
+      };
+    }
   });
 
   ipcMain.handle("display:show-slide", async (_, slide) => {

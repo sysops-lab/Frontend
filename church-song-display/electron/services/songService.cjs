@@ -262,6 +262,7 @@ async function deleteSong(id) {
   );
 
   return true;
+  
 }
 
 module.exports = {
