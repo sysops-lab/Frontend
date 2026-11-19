@@ -27,204 +27,651 @@ body {
    OPERATOR APPLICATION
 ========================= */
 
+/* =====================================
+   GLOBAL STYLES
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
 .application {
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
 
-    color: white;
+    color: #ffffff;
+    background: #07140e;
+
+    font-family: Arial, Helvetica, sans-serif;
 }
 
+
+/* =====================================
+   TOP BAR
+===================================== */
 
 .topbar {
-    height: 70px;
+    position: relative;
+    z-index: 5;
+
+    min-height: 70px;
+    padding: 12px 25px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
+    gap: 20px;
 
-    padding: 0 25px;
+    background: rgba(6, 20, 13, 0.97);
 
-    background: #1f2937;
+    border-bottom: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+.topbar h1 {
+    margin: 0;
+
+    color: #86efac;
+
+    font-size: 25px;
+    font-weight: 700;
 }
 
 
+/* =====================================
+   BUTTONS
+===================================== */
+
 .topbar button,
-button {
-    border: none;
+.content > button {
+    padding: 11px 18px;
 
-    padding: 10px 16px;
+    border: 1px solid rgba(134, 239, 172, 0.2);
+    border-radius: 8px;
 
-    border-radius: 6px;
+    background: #166534;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
 
     cursor: pointer;
 
-    background: #2563eb;
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.topbar button:hover,
+.content > button:hover {
+    background: #15803d;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 18px rgba(34, 197, 94, 0.2);
+}
+
+
+/* =====================================
+   WORKSPACE
+===================================== */
+
+.workspace {
+    position: relative;
+    isolation: isolate;
+
+    min-height: calc(100vh - 70px);
+
+    display: grid;
+
+    grid-template-columns: 350px minmax(0, 1fr);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(5, 20, 12, 0.94),
+            rgba(9, 48, 29, 0.86),
+            rgba(5, 20, 12, 0.95)
+        ),
+        url("/images/church-background.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+    min-width: 0;
+    padding: 25px;
+
+    overflow-y: auto;
+
+    background: rgba(9, 24, 16, 0.88);
+
+    border-right: 1px solid rgba(74, 222, 128, 0.16);
+
+    backdrop-filter: blur(12px);
+
+    animation: sidebarEntrance 0.6s ease both;
+}
+
+
+/* =====================================
+   SEARCH INPUT
+===================================== */
+
+.sidebar input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid #31533d;
+    border-radius: 10px;
+
+    outline: none;
+
+    background: rgba(31, 41, 55, 0.85);
 
     color: white;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+}
+
+.sidebar input::placeholder {
+    color: #9ca3af;
+}
+
+.sidebar input:focus {
+    border-color: #4ade80;
+
+    background: rgba(31, 41, 55, 0.98);
+
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.12);
+}
+
+
+/* =====================================
+   SONG LIST
+===================================== */
+
+.song-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+
+/* =====================================
+   SONG ITEMS
+===================================== */
+
+.song-item {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    padding: 16px;
+
+    display: block;
+
+    text-align: left;
+
+    border: 1px solid rgba(134, 239, 172, 0.1);
+    border-radius: 10px;
+
+    background: rgba(31, 41, 55, 0.75);
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+
+    animation: fadeInUp 0.45s ease both;
+}
+
+
+/* Green accent */
+
+.song-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background: #4ade80;
+
+    transform: scaleY(0);
+    transform-origin: center;
+
+    transition: transform 0.25s ease;
+}
+
+
+/* Hover effect */
+
+.song-item:hover {
+    transform: translateX(4px);
+
+    background: rgba(22, 101, 52, 0.45);
+
+    border-color: rgba(74, 222, 128, 0.5);
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.song-item:hover::before {
+    transform: scaleY(1);
+}
+
+
+/* Song title */
+
+.song-item strong {
+    display: block;
+
+    color: #f0fdf4;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+
+/* Song artist */
+
+.song-item small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #a7b8ac;
+
+    font-size: 12px;
+}
+
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.content {
+    min-width: 0;
+
+    padding: 35px;
+
+    overflow-y: auto;
+
+    color: #ffffff;
+
+    background: rgba(5, 20, 12, 0.2);
+
+    animation: contentEntrance 0.7s ease both;
+}
+
+
+/* Selected song title */
+
+.content h2 {
+    margin: 0 0 12px;
+
+    color: #86efac;
+
+    font-size: clamp(24px, 3vw, 34px);
+
+    line-height: 1.3;
+}
+
+
+/* Artist information */
+
+.content > p {
+    margin: 0 0 22px;
+
+    color: #b9cbbf;
 
     font-size: 15px;
 }
 
 
-button:hover {
-    background: #1d4ed8;
+/* Edit song button */
+
+.content > button {
+    margin-bottom: 28px;
 }
 
 
-/* Dashboard */
-
-.dashboard {
-    padding: 40px;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(250px, 1fr)
-        );
-
-    gap: 25px;
-
-    background: #111827;
-}
-
-
-.dashboard a {
-    padding: 30px;
-
-    background: #1f2937;
-
-    color: white;
-
-    text-decoration: none;
-
-    border-radius: 10px;
-}
-
-
-.dashboard a:hover {
-    background: #374151;
-}
-
-
-/* Workspace */
-
-.workspace {
-    height: calc(100vh - 70px);
-
-    display: grid;
-
-    grid-template-columns:
-        350px 1fr;
-}
-
-
-.sidebar {
-    padding: 20px;
-
-    overflow-y: auto;
-
-    background: #111827;
-}
-
-
-.sidebar input {
-    width: 100%;
-
-    padding: 12px;
-
-    border: 1px solid #374151;
-
-    border-radius: 6px;
-
-    background: #1f2937;
-
-    color: white;
-}
-
-
-.song-list {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    margin-top: 20px;
-}
-
-
-.song-item {
-    width: 100%;
-
-    text-align: left;
-
-    background: #1f2937;
-}
-
-
-.song-item:hover {
-    background: #374151;
-}
-
-
-.song-item small {
-    display: block;
-
-    margin-top: 5px;
-
-    color: #9ca3af;
-}
-
-
-.content {
-    padding: 30px;
-
-    overflow-y: auto;
-
-    background: #f3f4f6;
-
-    color: #111827;
-}
-
-
-/* Slides */
+/* =====================================
+   SLIDES GRID
+===================================== */
 
 .slides {
     display: grid;
 
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(300px, 1fr)
-        );
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(260px, 1fr)
+    );
 
     gap: 20px;
 }
 
 
+/* =====================================
+   SLIDE CARDS
+===================================== */
+
 .slide-card {
+    position: relative;
+    overflow: hidden;
+
+    min-width: 0;
     min-height: 180px;
 
-    padding: 20px;
+    padding: 24px;
 
     text-align: left;
 
-    background: white;
+    border: 1px solid rgba(134, 239, 172, 0.17);
+    border-radius: 14px;
 
-    color: #111827;
+    background: rgba(17, 38, 25, 0.88);
 
-    border: 2px solid transparent;
+    color: #ffffff;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+
+    animation: fadeInUp 0.6s ease both;
 }
 
 
-.slide-card:hover {
-    border-color: #2563eb;
+/* Slide accent */
 
-    background: white;
+.slide-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #15803d,
+        #86efac
+    );
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition: transform 0.3s ease;
+}
+
+
+/* Slide hover */
+
+.slide-card:hover {
+    transform: translateY(-5px);
+
+    background: rgba(22, 65, 40, 0.95);
+
+    border-color: rgba(74, 222, 128, 0.65);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25),
+        0 0 15px rgba(34, 197, 94, 0.08);
+}
+
+.slide-card:hover::before {
+    transform: scaleX(1);
+}
+
+
+/* Slide type */
+
+.slide-card strong {
+    display: block;
+
+    margin-bottom: 16px;
+
+    color: #86efac;
+
+    font-size: 13px;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* Slide lyrics/content */
+
+.slide-card p {
+    margin: 0;
+
+    color: #e5e7eb;
+
+    font-size: 15px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+
+/* =====================================
+   BACKGROUND GREEN GLOW
+===================================== */
+
+.workspace::before {
+    content: "";
+
+    position: absolute;
+    z-index: -1;
+
+    width: 350px;
+    height: 350px;
+
+    top: 15%;
+    right: 5%;
+
+    background: rgba(34, 197, 94, 0.12);
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    pointer-events: none;
+
+    animation: backgroundGlow 8s ease-in-out infinite alternate;
+}
+
+
+/* =====================================
+   ANIMATIONS
+===================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sidebarEntrance {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes contentEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes backgroundGlow {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+
+    to {
+        transform: translate(-40px, 40px) scale(1.2);
+        opacity: 1;
+    }
+}
+
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 900px) {
+    .workspace {
+        grid-template-columns: 280px minmax(0, 1fr);
+    }
+
+    .sidebar {
+        padding: 18px;
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    .slides {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 650px) {
+    .topbar {
+        padding: 15px;
+
+        flex-wrap: wrap;
+
+        gap: 12px;
+    }
+
+    .topbar h1 {
+        font-size: 21px;
+    }
+
+    .workspace {
+        height: auto;
+        min-height: calc(100vh - 70px);
+
+        grid-template-columns: 1fr;
+
+        background-attachment: scroll;
+    }
+
+    .sidebar {
+        max-height: 350px;
+
+        border-right: none;
+        border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .content {
+        padding: 25px 18px;
+
+        overflow: visible;
+    }
+
+    .slides {
+        grid-template-columns: 1fr;
+    }
+
+    .slide-card {
+        min-height: 150px;
+    }
+}
+
+
+/* =====================================
+   ACCESSIBILITY
+===================================== */
+
+.song-item:focus-visible,
+.slide-card:focus-visible,
+.topbar button:focus-visible,
+.content > button:focus-visible {
+    outline: 2px solid #86efac;
+    outline-offset: 3px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .workspace::before,
+    .sidebar,
+    .content,
+    .song-item,
+    .slide-card {
+        animation: none;
+    }
+
+    .song-item,
+    .slide-card,
+    .topbar button,
+    .content > button {
+        transition: none;
+    }
+
+    .song-item:hover,
+    .slide-card:hover {
+        transform: none;
+    }
 }
 
 
@@ -332,26 +779,26 @@ button:hover {
 .projection-title {
     position: absolute;
 
-    top: 30px;
+    top: 5px;
 
-    font-size: 28px;
+    font-size: 20px;
 
     color: #aaa;
 }
 
 
 .projection-lyrics {
-    max-width: 90%;
+    max-width: 120%;
 
     white-space: pre-line;
 
     font-size: clamp(
-        40px,
+        120px,
         5vw,
-        80px
+        100px
     );
 
-    line-height: 1.35;
+    line-height: 1.5;
 
     font-weight: bold;
 }
@@ -368,13 +815,13 @@ button:hover {
 
 .display-credit {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 
     color: rgba(255, 255, 255, 0.45);
 
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 400;
 
     letter-spacing: 0.5px;
@@ -382,4 +829,231 @@ button:hover {
     white-space: nowrap;
 
     pointer-events: none;
+}
+/* =====================================
+   PROJECTOR DISPLAY - PROTECTED STYLES
+===================================== */
+
+.projection-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    margin: 0;
+    padding: 5vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    background: #000000 !important;
+    color: #ffffff !important;
+
+    text-align: center;
+}
+
+/* Projector title */
+
+.projection-screen .projection-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 90%;
+
+    color: #aaaaaa;
+
+    font-size: 20px;
+    font-weight: normal;
+}
+
+/* Projected lyrics */
+
+.projection-screen .projection-lyrics {
+/* 
+    margin: 0 auto;
+
+    color: #ffffff !important;
+
+    font-weight: bold;
+    line-height: 1.5; */
+
+    /* text-align: center; */
+    /* white-space: pre-line; */
+    /* overflow-wrap: anywhere; */
+
+    font-size: clamp(70px, 7vw, 125px);
+    width: 100%;
+}
+
+/* Projector credit */
+
+.projection-screen .display-credit {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: rgba(255, 255, 255, 0.45);
+
+    font-size: 10px;
+    font-weight: normal;
+
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Prevent projector hover effects */
+
+.projection-screen button:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* =========================================
+   DASHBOARD PAGE
+========================================= */
+
+.dashboard {
+    position: relative;
+    isolation: isolate;
+
+    width: 100%;
+    min-height: calc(100vh - 70px);
+
+    padding: 30px 35px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(22, 101, 52, 0.15),
+            transparent 35%
+        ),
+        #0b1912;
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   HEADER TAGLINE
+========================================= */
+
+.header-tagline {
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 400;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   WELCOME SECTION
+========================================= */
+
+.welcome-section {
+    max-width: 850px;
+
+    margin-bottom: 35px;
+
+    animation: dashboardWelcome 0.8s ease both;
+}
+
+
+/* Welcome label */
+
+.welcome-label {
+    margin-bottom: 22px;
+
+    color: #86efac;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* Welcome heading */
+
+.welcome-section h2 {
+    max-width: 800px;
+
+    margin-bottom: 18px;
+
+    color: #ffffff;
+
+    font-size: clamp(28px, 4vw, 42px);
+
+    font-weight: 700;
+
+    line-height: 1.35;
+
+    letter-spacing: -0.7px;
+}
+
+
+/* Welcome description */
+
+.welcome-description {
+    max-width: 650px;
+
+    color: #b9cbbf;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   DASHBOARD CARDS
+========================================= */
+
+.dashboard-cards {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+
+    max-width: 1100px;
+
+    margin-top: 30px;
+}
+
+
+/* =========================================
+   INDIVIDUAL DASHBOARD CARD
+========================================= */
+
+.dashboard-card {
+    position: relative;
+    isolation: isolate;
+
+    min-width: 0;
+
+    padding: 28px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
 }
